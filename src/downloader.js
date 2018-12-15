@@ -1,12 +1,14 @@
-import xhr from './async'
+import { xhr, isFunction } from './utils'
+import FileSaver from 'file-saver'
 
 class Downloader {
-    constructor(url, data, method, option) {
+    constructor(url, data, fileName, method, option) {
         this.xhr = xhr(url, method, option)
         this._onProcess = []
         this._onError = []
         this._onFinish = []
         this._data = data
+        this._fileName = fileName
         this.isDownloading = false
     }
 
@@ -38,11 +40,11 @@ class Downloader {
         }
 
         this.xhr.onprogress = (event) => {
-            const percent = event.loaded / event.total
+            const percent = event.loaded / event.total || 0
             const speed = event.loaded - prevLoaded
             prevLoaded = event.loaded
             this._onProcess.forEach(callback => {
-                callback.call(this.xhr, [percent, speed, event.loaded, event.total])
+                callback.apply(this.xhr, [percent, speed, event.loaded, event.total])
             })
         }
 
@@ -51,9 +53,18 @@ class Downloader {
         }
 
         this.xhr.onreadystatechange = () => {
+            if (this.xhr.readyState === XMLHttpRequest.DONE && this.xhr.status === 200) {
+                FileSaver.saveAs(this.xhr.response, this._fileName)
+            }
         }
 
-        this.xhr.send(_data)
+        this.xhr.send(this._data)
     }
 
 }
+
+function download(...args) {
+    return new Downloader(...args)
+}
+
+export default download

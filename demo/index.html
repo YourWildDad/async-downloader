@@ -1,13 +1,31 @@
 <!doctype html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>异步下载工具</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>异步下载工具</title>
+    <style>
+        .process-bar {
+            width: 80%;
+            height: 25px;
+            margin: auto;
+            border: 1px solid #666;
+        }
+
+        .process-bar_inner {
+            height: 100%;
+            background-color: rgb(16, 151, 225);
+        }
+    </style>
 </head>
 <body>
-
+<div class="process-bar">
+    <div id="process" class="process-bar_inner"></div>
+</div>
+<div class="text">
+    <span id="speed" style="float: right"></span>
+</div>
 </body>
 </html>
